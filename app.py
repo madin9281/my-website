@@ -29,16 +29,16 @@ def register():
     if request.method == 'POST':
         user = request.form['username']
         pwd = request.form['password']
-hashed_pwd = generate_password_hash(pwd)
 
-new_user = User(username=user, password=hashed_pwd)
+        hashed_pwd = generate_password_hash(pwd)
+
+        new_user = User(username=user, password=hashed_pwd)
         db.session.add(new_user)
         db.session.commit()
 
         return redirect('/login')
 
     return render_template('register.html')
-
 # LOGIN
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -48,12 +48,7 @@ def login():
 
         found = User.query.filter_by(username=user).first()
 
-if found and check_password_hash(found.password, pwd):
-    return render_template('dashboard.html', username=user)
-else:
-    return "Wrong username or password ❌"
-
-        if found:
+        if found and check_password_hash(found.password, pwd):
             return render_template('dashboard.html', username=user)
         else:
             return "Wrong username or password ❌"
