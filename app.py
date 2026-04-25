@@ -30,6 +30,16 @@ def register():
         user = request.form['username']
         pwd = request.form['password']
 
+        # ✅ Strong password check
+        if len(pwd) < 6:
+            return "Password must be at least 6 characters ❌"
+
+        if not any(char.isupper() for char in pwd):
+            return "Password must contain 1 uppercase letter ❌"
+
+        if not any(char.isdigit() for char in pwd):
+            return "Password must contain 1 number ❌"
+
         hashed_pwd = generate_password_hash(pwd)
 
         new_user = User(username=user, password=hashed_pwd)
