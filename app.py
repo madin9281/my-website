@@ -3,15 +3,21 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-# Database Table
+# ✅ MODEL FIRST
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(100))
     password = db.Column(db.String(100))
 
+# ✅ THEN CREATE TABLE
+with app.app_context():
+    db.create_all()
+
+# HOME
 @app.route('/')
 def home():
     return render_template('login.html')
@@ -34,24 +40,18 @@ def register():
 # LOGIN
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    try:
-        if request.method == 'POST':
-            user = request.form['username']
-            pwd = request.form['password']
+    if request.method == 'POST':
+        user = request.form['username']
+        pwd = request.form['password']
 
-            found = User.query.filter_by(username=user, password=pwd).first()
+        found = User.query.filter_by(username=user, password=pwd).first()
 
-            if found:
-                return f"Welcome {user} 🎉"
-            else:
-                return "Wrong username or password ❌"
+        if found:
+            return f"Welcome {user} 🎉"
+        else:
+            return "Wrong username or password ❌"
 
-        return render_template('login.html')
-
-    except Exception as e:
-        return str(e)
+    return render_template('login.html')
 
 if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()
     app.run()
