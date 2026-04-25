@@ -46,8 +46,8 @@ def login():
 
         found = User.query.filter_by(username=user, password=pwd).first()
 
-        if found:
-            return f"Welcome {user} 🎉"
+       if found:
+    return render_template('dashboard.html', username=user)
         else:
             return "Wrong username or password ❌"
 
