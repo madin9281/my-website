@@ -1,1 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: linear-gradient(to right, #667eea, #764ba2);
+            color: white;
+            text-align: center;
+            padding-top: 100px;
+        }
 
+        .box {
+            background: white;
+            color: black;
+            padding: 30px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+
+        a {
+            display: block;
+            margin-top: 20px;
+            color: red;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="box">
+    <h2>Welcome {{ username }} 🎉</h2>
+    <p>You are logged in successfully</p>
+
+    <a href="/login">Logout</a>
+</div>
+
+</body>
+</html>
