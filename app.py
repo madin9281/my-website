@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
@@ -28,8 +29,9 @@ def register():
     if request.method == 'POST':
         user = request.form['username']
         pwd = request.form['password']
+hashed_pwd = generate_password_hash(pwd)
 
-        new_user = User(username=user, password=pwd)
+new_user = User(username=user, password=hashed_pwd)
         db.session.add(new_user)
         db.session.commit()
 
@@ -44,7 +46,12 @@ def login():
         user = request.form['username']
         pwd = request.form['password']
 
-        found = User.query.filter_by(username=user, password=pwd).first()
+        found = User.query.filter_by(username=user).first()
+
+if found and check_password_hash(found.password, pwd):
+    return render_template('dashboard.html', username=user)
+else:
+    return "Wrong username or password ❌"
 
         if found:
             return render_template('dashboard.html', username=user)
