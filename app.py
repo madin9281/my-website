@@ -1,11 +1,14 @@
-from flask import Flask, render_template, request
-from flask_sqlalchemy import SQLAlchemy
-from werkzeug.security import generate_password_hash, check_password_hash
+from flask import Flask
 
 app = Flask(__name__)
+
 @app.route('/')
 def home():
     return "App is running 🚀"
+
+@app.route('/login')
+def login():
+    return "Login page"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 
 db = SQLAlchemy(app)
