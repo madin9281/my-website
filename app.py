@@ -34,18 +34,22 @@ def register():
 # LOGIN
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method == 'POST':
-        user = request.form['username']
-        pwd = request.form['password']
+    try:
+        if request.method == 'POST':
+            user = request.form['username']
+            pwd = request.form['password']
 
-        found = User.query.filter_by(username=user, password=pwd).first()
+            found = User.query.filter_by(username=user, password=pwd).first()
 
-        if found:
-            return f"Welcome {user} 🎉"
-        else:
-            return "Wrong username or password ❌"
+            if found:
+                return f"Welcome {user} 🎉"
+            else:
+                return "Wrong username or password ❌"
 
-    return render_template('login.html')
+        return render_template('login.html')
+
+    except Exception as e:
+        return str(e)
 
 if __name__ == "__main__":
     with app.app_context():
